@@ -7,11 +7,13 @@
 #include "WGM63.h"
 
 
-WGM63::WGM63(int dirPin, int stepperPin, int enPin, int reverseFactor)
+WGM63::WGM63(int index, int dirPin, int stepperPin, int enPin, int reverseFactor)
 {
   pinMode(dirPin, OUTPUT);
   pinMode(stepperPin, OUTPUT);
   pinMode(enPin, OUTPUT);
+
+  _index = index;
   
   _dirPin = dirPin;
   _stepperPin = stepperPin;
@@ -57,6 +59,11 @@ void WGM63::loop()
 {
   if(_currentState == STOP && _destState == STOP)
     return;
+
+  if(_currentState == STOP)
+  {
+    changeDirection( _destState );
+  }
   
   if(_currentState != _destState)
   {

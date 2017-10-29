@@ -8,16 +8,16 @@ MACHINE TYPE : SNSD-TY
 
 
 int nMotorCount = 2;
-WGM63 steppers[2] = {WGM63(9, 10, 0, 1), WGM63(11, 12, 0, -1)};
+WGM63 steppers[2] = {WGM63(1, 9, 10, 0, 1), WGM63(2, 7, 8, 0, -1)};
 
-long nTotalStepCount = ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 100L;
+long nTotalStepCount = ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 5L;
 long nCurrentStepCount;
 
 void move(int direction)
 {
   for(int i = 0; i < nMotorCount; i++)
   {
-    steppers[i].setDirection(MOVE_FORWARD);
+    steppers[i].setDirection(direction);
   }
 }
 
@@ -50,19 +50,16 @@ void loop(){
   if(nCurrentStepCount < 0)
     return;
 
-  for(long i = 0; i < nTotalStepCount; i++)
-  {
-    if(i < ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 5L)
-      move(MOVE_FORWARD);
-    else if(i < ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 10L)
-      turnLeft();
-    else if(i < ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 15L)
-      move(MOVE_BACKWARD);
-    else
-      turnRight(); 
-    
-    nCurrentStepCount--;
-  }
+  if(nCurrentStepCount < ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 2L)
+    move(MOVE_FORWARD);
+  else if(nCurrentStepCount < ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 3L)
+    turnLeft();
+  else if(nCurrentStepCount < ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 4L)
+    move(MOVE_BACKWARD);
+  else
+    turnRight();
+
+  nCurrentStepCount--;
 
   for(int i = 0; i < nMotorCount; i++)
   {

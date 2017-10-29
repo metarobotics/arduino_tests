@@ -25,7 +25,7 @@
 class WGM63
 {
   public:
-    WGM63(int dirPin, int stepperPin, int enPin, int reverseFactor);
+    WGM63(int index, int dirPin, int stepperPin, int enPin, int reverseFactor);
     void setDirection(int nDirection);
     void rotate();
     void stop();
@@ -33,6 +33,8 @@ class WGM63
   private:
 
     void changeDirection(int nDirection);
+
+    int _index;
   
     int _dirPin, _stepperPin, _enPin;
     int _currentState;
