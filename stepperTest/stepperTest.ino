@@ -1,74 +1,72 @@
-int smDirectionPinLeft = 9;
-int smStepPinLeft = 10;
-int smDirectionPinRight = 11;
-int smStepPinRight = 12;
-int nMotionDelay = 1500;
+/*
+MACHINE TYPE : SNSD-TY
+*/
+
+#include "WGM63.h"
+
+// MOTOR DRIVER PINS
+
+
+int nMotorCount = 2;
+WGM63 steppers[2] = {WGM63(9, 10, 0, 1), WGM63(11, 12, 0, -1)};
+
+long nTotalStepCount = ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 100L;
+long nCurrentStepCount;
+
+void move(int direction)
+{
+  for(int i = 0; i < nMotorCount; i++)
+  {
+    steppers[i].setDirection(MOVE_FORWARD);
+  }
+}
+
+void turnLeft()
+{
+  steppers[0].setDirection(MOVE_BACKWARD);
+  steppers[1].setDirection(MOVE_FORWARD);
+}
+
+void turnRight()
+{
+  steppers[0].setDirection(MOVE_FORWARD);
+  steppers[1].setDirection(MOVE_BACKWARD);
+}
+
+void stop()
+{
+  for(int i = 0; i < nMotorCount; i++)
+  {
+    steppers[i].stop();
+  }
+}
 
 void setup() {
-  // put your setup code here, to run once:
-  pinMode(smDirectionPinLeft, OUTPUT);
-  pinMode(smStepPinLeft, OUTPUT);
-  pinMode(smDirectionPinRight, OUTPUT);
-  pinMode(smStepPinRight, OUTPUT);
-
-  digitalWrite(smDirectionPinLeft, LOW);
-  digitalWrite(smDirectionPinRight, HIGH);
+  nCurrentStepCount = nTotalStepCount;
 }
 
 void loop(){
 
-//best result 260
+  if(nCurrentStepCount < 0)
+    return;
 
-int nAccerationStep = 2;
-int nMaxDelay = 1010;
-int nCurDelay = 1010;
-int nMinDelay = 260;
-
-for(int i = 0; i < 16000; i++)
-{
-  if(nCurDelay > nMinDelay)
-    nCurDelay = nCurDelay - nAccerationStep;
-  
-  digitalWrite(smStepPinLeft,HIGH);
-  digitalWrite(smStepPinRight,HIGH);
-  delayMicroseconds(nCurDelay);
-  digitalWrite(smStepPinLeft, LOW);
-  digitalWrite(smStepPinRight, LOW);
-  delayMicroseconds(nCurDelay);
-}
-
-delay(1500);
-  /*
-  rotate(32000, 0.8);
-  delay(nMotionDelay);
-  rotate(32000, 0.8);
-  delay(nMotionDelay);
-  rotate(-32000, 0.8);
-  delay(nMotionDelay);
-  rotate(-32000, 0.8);
-  delay(nMotionDelay);
-  */
-}
-
-void rotate(int steps, float speed){
-  int direction;
-
-  if(steps > 0){
-    direction = HIGH;
-  }else{
-    direction = LOW;
+  for(long i = 0; i < nTotalStepCount; i++)
+  {
+    if(i < ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 5L)
+      move(MOVE_FORWARD);
+    else if(i < ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 10L)
+      turnLeft();
+    else if(i < ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 15L)
+      move(MOVE_BACKWARD);
+    else
+      turnRight(); 
+    
+    nCurrentStepCount--;
   }
 
-  speed = 1/speed * 10;
-  steps = abs(steps);
-
-  digitalWrite(smDirectionPinLeft, direction);
-
-  for(int i = 0; i < steps; i++){
-    digitalWrite(smStepPinLeft, HIGH);
-    delayMicroseconds(speed);
-    digitalWrite(smStepPinLeft, LOW);
-    delayMicroseconds(speed);
+  for(int i = 0; i < nMotorCount; i++)
+  {
+    steppers[i].loop();
   }
 }
 
