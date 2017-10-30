@@ -10,7 +10,7 @@ MACHINE TYPE : SNSD-TY
 int nMotorCount = 2;
 WGM63 steppers[2] = {WGM63(1, 9, 10, 0, 1), WGM63(2, 7, 8, 0, -1)};
 
-long nTotalStepCount = ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 5L;
+long nTotalStepCount = ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 40L;
 long nCurrentStepCount;
 
 void move(int direction)
@@ -50,11 +50,11 @@ void loop(){
   if(nCurrentStepCount < 0)
     return;
 
-  if(nCurrentStepCount < ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 2L)
+  if(nCurrentStepCount < ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 10L)
     move(MOVE_FORWARD);
-  else if(nCurrentStepCount < ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 3L)
+  else if(nCurrentStepCount < ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 20L)
     turnLeft();
-  else if(nCurrentStepCount < ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 4L)
+  else if(nCurrentStepCount < ROTATE_FULL * CLOCK_DIVIDE * GEAR_RATIO * 30L)
     move(MOVE_BACKWARD);
   else
     turnRight();

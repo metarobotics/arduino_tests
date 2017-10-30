@@ -17,8 +17,8 @@
 #define WHEEL_SIZE 220
 
 #define START_DELAY 1010
-#define DRIVING_DELAY 260
-
+#define DRIVING_DELAY 130
+#define ROTATE_90DEG 1
 
 #include "Arduino.h"
 
