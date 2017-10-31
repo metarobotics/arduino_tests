@@ -42,8 +42,11 @@ void stop()
 
 void setup() {
 
-  _missions.enqueue(DriveMission(enDriveAction::MoveForward, ONE_TURN_STEPS * 5));
-  _missions.enqueue(DriveMission(enDriveAction::MoveBackward, ONE_TURN_STEPS * 5));
+  Serial.begin(9600);  
+  Serial.println("--- Start Serial Monitor SEND_RCVE ---");
+
+  _missions.enqueue(DriveMission(enDriveAction::MoveForward, ONE_TURN_STEPS * 1));
+  _missions.enqueue(DriveMission(enDriveAction::MoveBackward, ONE_TURN_STEPS * 1));
   _missions.enqueue(DriveMission(enDriveAction::TurnLeft, ONE_TURN_STEPS * 1));
   _missions.enqueue(DriveMission(enDriveAction::MoveForward, ONE_TURN_STEPS * 5));
   _missions.enqueue(DriveMission(enDriveAction::MoveBackward, ONE_TURN_STEPS * 5));
@@ -69,13 +72,17 @@ void loop(){
     currentMission.update();
     if(currentMission.IsComplete())
     {
+      Serial.println("Mission complete");
       _missions.dequeue();
     }
-  }
-  
-  for(int i = 0; i < MOTOR_COUNT; i++)
-  {
-    steppers[i].loop();
+    else
+    {
+      for(int i = 0; i < MOTOR_COUNT; i++)
+      {
+        steppers[i].loop();
+      }
+      break;
+    }
   }
 }
 

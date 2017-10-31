@@ -5,6 +5,7 @@ DriveMission::DriveMission(enDriveAction action, long steps)
   _action = action;
   _steps = steps;
   _currentStep = 0;
+  _isComplete = false;
 }
 
 DriveMission::~DriveMission()
@@ -28,6 +29,9 @@ void DriveMission::update()
     return;
     
   _currentStep++;
+
+  Serial.print(_currentStep);
+  
   if(_steps == _currentStep)
     _isComplete = true;
 }
