@@ -10,7 +10,7 @@ MACHINE TYPE : SNSD-TY
 #define MOTOR_COUNT 2
 
 WGM63 steppers[2] = {WGM63(1, 9, 10, 0, 1), WGM63(2, 7, 8, 0, -1)};
-QueueArray<DriveMission> _missions;
+QueueArray<DriveMission*> _missions;
 
 void move(int direction)
 {
@@ -45,22 +45,22 @@ void setup() {
   Serial.begin(9600);  
   Serial.println("--- Start Serial Monitor SEND_RCVE ---");
 
-  _missions.enqueue(DriveMission(enDriveAction::MoveForward, ONE_TURN_STEPS * 1));
-  _missions.enqueue(DriveMission(enDriveAction::MoveBackward, ONE_TURN_STEPS * 1));
-  _missions.enqueue(DriveMission(enDriveAction::TurnLeft, ONE_TURN_STEPS * 1));
-  _missions.enqueue(DriveMission(enDriveAction::MoveForward, ONE_TURN_STEPS * 5));
-  _missions.enqueue(DriveMission(enDriveAction::MoveBackward, ONE_TURN_STEPS * 5));
-  _missions.enqueue(DriveMission(enDriveAction::TurnRight, ONE_TURN_STEPS * 1));
-  _missions.enqueue(DriveMission(enDriveAction::MoveForward, ONE_TURN_STEPS * 5));
-  _missions.enqueue(DriveMission(enDriveAction::MoveBackward, ONE_TURN_STEPS * 5));
+  _missions.enqueue(new DriveMission(enDriveAction::MoveForward, ONE_TURN_STEPS * 1));
+  _missions.enqueue(new DriveMission(enDriveAction::MoveBackward, ONE_TURN_STEPS * 1));
+  _missions.enqueue(new DriveMission(enDriveAction::TurnLeft, ONE_TURN_STEPS * 1));
+  _missions.enqueue(new DriveMission(enDriveAction::MoveForward, ONE_TURN_STEPS * 5));
+  _missions.enqueue(new DriveMission(enDriveAction::MoveBackward, ONE_TURN_STEPS * 5));
+  _missions.enqueue(new DriveMission(enDriveAction::TurnRight, ONE_TURN_STEPS * 1));
+  _missions.enqueue(new DriveMission(enDriveAction::MoveForward, ONE_TURN_STEPS * 5));
+  _missions.enqueue(new DriveMission(enDriveAction::MoveBackward, ONE_TURN_STEPS * 5));
 }
 
 void loop(){
 
   while (!_missions.isEmpty ())
   {
-    DriveMission currentMission = _missions.front();
-    switch(currentMission.GetAction())
+    DriveMission *currentMission = _missions.front();
+    switch(currentMission->GetAction())
     {
       case enDriveAction::MoveForward: move(MOVE_FORWARD); break;
       case enDriveAction::MoveBackward: move(MOVE_BACKWARD); break;
@@ -69,8 +69,8 @@ void loop(){
       case enDriveAction::Stop: stop(); break;
     }
 
-    currentMission.update();
-    if(currentMission.IsComplete())
+    currentMission->update();
+    if(currentMission->IsComplete())
     {
       Serial.println("Mission complete");
       _missions.dequeue();
