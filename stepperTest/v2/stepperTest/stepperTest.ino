@@ -45,14 +45,16 @@ void setup() {
   Serial.begin(9600);  
   Serial.println("--- Start Serial Monitor SEND_RCVE ---");
 
-  _missions.enqueue(new DriveMission(enDriveAction::MoveForward, ONE_TURN_STEPS * 1));
-  _missions.enqueue(new DriveMission(enDriveAction::MoveBackward, ONE_TURN_STEPS * 1));
-  _missions.enqueue(new DriveMission(enDriveAction::TurnLeft, ONE_TURN_STEPS * 1));
-  _missions.enqueue(new DriveMission(enDriveAction::MoveForward, ONE_TURN_STEPS * 5));
-  _missions.enqueue(new DriveMission(enDriveAction::MoveBackward, ONE_TURN_STEPS * 5));
-  _missions.enqueue(new DriveMission(enDriveAction::TurnRight, ONE_TURN_STEPS * 1));
-  _missions.enqueue(new DriveMission(enDriveAction::MoveForward, ONE_TURN_STEPS * 5));
-  _missions.enqueue(new DriveMission(enDriveAction::MoveBackward, ONE_TURN_STEPS * 5));
+  for(int i = 0; i < 5; i++)
+  {
+    _missions.enqueue(new DriveMission(enDriveAction::MoveForward, ONE_TURN_STEPS * 5));
+    _missions.enqueue(new DriveMission(enDriveAction::MoveBackward, ONE_TURN_STEPS * 5));
+    _missions.enqueue(new DriveMission(enDriveAction::TurnLeft, ONE_TURN_STEPS * 0.5));
+    _missions.enqueue(new DriveMission(enDriveAction::MoveForward, ONE_TURN_STEPS * 5));
+    _missions.enqueue(new DriveMission(enDriveAction::MoveBackward, ONE_TURN_STEPS * 5));
+    _missions.enqueue(new DriveMission(enDriveAction::TurnRight, ONE_TURN_STEPS * 0.5));  
+  }
+  
 }
 
 void loop(){

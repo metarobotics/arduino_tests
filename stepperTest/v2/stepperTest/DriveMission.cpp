@@ -29,8 +29,6 @@ void DriveMission::update()
     return;
     
   _currentStep++;
-
-  Serial.print(_currentStep);
   
   if(_steps == _currentStep)
     _isComplete = true;
