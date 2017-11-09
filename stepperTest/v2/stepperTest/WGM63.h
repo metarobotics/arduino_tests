@@ -10,14 +10,14 @@
 #define MOVE_FORWARD 1
 #define MOVE_BACKWARD -1
 #define STOP 0
-#define ACCELERATION_STEP 2
+#define ACCELERATION_STEP 1
 #define ROTATE_FULL 200
 #define CLOCK_DIVIDE 8
 #define GEAR_RATIO 10
 #define WHEEL_SIZE 220
 
 #define START_DELAY 1010
-#define DRIVING_DELAY 130
+#define DRIVING_DELAY 65
 #define ROTATE_90DEG 1
 
 #include "Arduino.h"

@@ -55,6 +55,10 @@ void WGM63::changeDirection(int nDirection)
     digitalWrite(_dirPin, LOW);
 }
 
+
+int nDivideCount = 0;
+static int nDivideStep = 3;
+
 void WGM63::loop()
 {
   if(_currentState == STOP && _destState == STOP)
@@ -67,7 +71,13 @@ void WGM63::loop()
   
   if(_currentState != _destState)
   {
-    _currentDelay += ACCELERATION_STEP;
+    nDivideCount++;
+    if(nDivideCount == nDivideStep)
+    {
+      _currentDelay += ACCELERATION_STEP;
+      nDivideCount = 0;
+    }
+    
     _currentDelay = constrain(_currentDelay, DRIVING_DELAY, START_DELAY);
     if(_currentDelay == START_DELAY)
     {
@@ -78,7 +88,13 @@ void WGM63::loop()
   {
     if(_currentDelay != DRIVING_DELAY)
     {
-      _currentDelay -= ACCELERATION_STEP;
+      nDivideCount++;
+      if(nDivideCount == nDivideStep)
+      {
+        _currentDelay -= ACCELERATION_STEP;
+        nDivideCount = 0;
+      }
+      
       _currentDelay = constrain(_currentDelay, DRIVING_DELAY, START_DELAY);
     }
   }

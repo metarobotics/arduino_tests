@@ -23,6 +23,7 @@ class DriveMission
     DriveMission(enDriveAction action, long steps);
     ~DriveMission();
     void update();
+    void reset();
 
     enDriveAction GetAction();
     bool IsComplete();

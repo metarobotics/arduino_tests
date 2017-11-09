@@ -4,8 +4,7 @@ DriveMission::DriveMission(enDriveAction action, long steps)
 {
   _action = action;
   _steps = steps;
-  _currentStep = 0;
-  _isComplete = false;
+  reset();
 }
 
 DriveMission::~DriveMission()
@@ -34,3 +33,8 @@ void DriveMission::update()
     _isComplete = true;
 }
 
+void DriveMission::reset()
+{
+  _currentStep = 0;
+  _isComplete = false;
+}
